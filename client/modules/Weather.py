@@ -1,4 +1,3 @@
-# -*- coding: utf-8-*-
 import re
 import datetime
 import struct
@@ -9,7 +8,7 @@ import bs4
 from client.app_utils import getTimezone
 from semantic.dates import DateService
 
-WORDS = ["WEATHER", "TODAY", "TOMORROW"]
+WORDS = ["날씨", "오늘", "내일"]
 
 
 def replaceAcronyms(text):
@@ -19,10 +18,10 @@ def replaceAcronyms(text):
 
     def parseDirections(text):
         words = {
-            'N': 'north',
-            'S': 'south',
-            'E': 'east',
-            'W': 'west',
+            'N': '북쪽',
+            'S': '남쪽',
+            'E': '동쪽',
+            'W': '서쪽',
         }
         output = [words[w] for w in list(text)]
         return ' '.join(output)
@@ -41,6 +40,9 @@ def replaceAcronyms(text):
 def get_locations():
     r = requests.get('http://www.wunderground.com/about/faq/' +
                      'international_cities.asp')
+    
+    # wonju KO  RKNW      37.33  127.95   150 47114
+
     soup = bs4.BeautifulSoup(r.text)
     data = soup.find(id="inner-content").find('pre').string
     # Data Stucture:
@@ -92,17 +94,7 @@ def get_forecast_by_wmo_id(wmo_id):
 
 
 def handle(text, mic, profile):
-    """
-    Responds to user-input, typically speech text, with a summary of
-    the relevant weather for the requested date (typically, weather
-    information will not be available for days beyond tomorrow).
 
-    Arguments:
-        text -- user-input, typically transcribed speech
-        mic -- used to interact with the user (for both input and output)
-        profile -- contains information related to the user (e.g., phone
-                   number)
-    """
     forecast = None
     if 'wmo_id' in profile:
         forecast = get_forecast_by_wmo_id(str(profile['wmo_id']))
@@ -110,8 +102,7 @@ def handle(text, mic, profile):
         forecast = get_forecast_by_name(str(profile['location']))
 
     if not forecast:
-        mic.say("I'm sorry, I can't seem to access that information. Please " +
-                "make sure that you've set your location on the dashboard.")
+        mic.say("날씨 정보를 얻어오는 것을 실패하였습니다.")
         return
 
     tz = getTimezone(profile)
@@ -123,12 +114,12 @@ def handle(text, mic, profile):
     weekday = service.__daysOfWeek__[date.weekday()]
 
     if date.weekday() == datetime.datetime.now(tz=tz).weekday():
-        date_keyword = "Today"
+        date_keyword = "오늘"
     elif date.weekday() == (
             datetime.datetime.now(tz=tz).weekday() + 1) % 7:
-        date_keyword = "Tomorrow"
+        date_keyword = "내일"
     else:
-        date_keyword = "On " + weekday
+        date_keyword = weekday
 
     output = None
 
@@ -138,17 +129,14 @@ def handle(text, mic, profile):
             if date_desc == 'forecast':
                 # For global forecasts
                 date_desc = entry['title'].split()[2].strip().lower()
-                weather_desc = entry['summary']
+                weather_desc = entry['description'].split(".")[0].strip().lower()
             elif date_desc == 'current':
                 # For first item of global forecasts
                 continue
-            else:
-                # US forecasts
-                weather_desc = entry['summary'].split('-')[1]
 
             if weekday == date_desc:
                 output = date_keyword + \
-                    ", the weather will be " + weather_desc + "."
+                    ", " + weather_desc + "."
                 break
         except:
             continue
@@ -157,16 +145,9 @@ def handle(text, mic, profile):
         output = replaceAcronyms(output)
         mic.say(output)
     else:
-        mic.say(
-            "I'm sorry. I can't see that far ahead.")
+        mic.say("죄송합니다. 찾을 수 없습니다.")
 
 
 def isValid(text):
-    """
-        Returns True if the text is related to the weather.
-
-        Arguments:
-        text -- user-input, typically transcribed speech
-    """
-    return bool(re.search(r'\b(weathers?|temperature|forecast|outside|hot|' +
-                          r'cold|jacket|coat|rain)\b', text, re.IGNORECASE))
+    
+    return bool(re.search(r'\b날씨\b', text, re.IGNORECASE))
