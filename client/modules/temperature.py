@@ -35,9 +35,9 @@ def read_temp():
 	
 
 def handle(text, mic, profile):
-	while True:
-	print(read_temp())	
-	time.sleep(1)
+    while True:
+        print(read_temp())
+        time.sleep(1)
 
 def isValid(text):
-	return bool(re.search(ur'\b주변 온도를\b', text, re.IGNORECASE))
+    return bool(re.search(ur'\b주변 온도를\b', text, re.IGNORECASE | re.UNICODE))
