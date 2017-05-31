@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import httplib2
 import sys
 import datetime
