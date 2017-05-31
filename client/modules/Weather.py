@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 import re
 import datetime
 import struct
@@ -8,7 +10,7 @@ import bs4
 from client.app_utils import getTimezone
 from semantic.dates import DateService
 
-WORDS = ["날씨", "오늘", "내일"]
+WORDS = [u"날씨", u"오늘", u"내일"]
 
 
 def replaceAcronyms(text):
@@ -114,10 +116,9 @@ def handle(text, mic, profile):
     weekday = service.__daysOfWeek__[date.weekday()]
 
     if date.weekday() == datetime.datetime.now(tz=tz).weekday():
-        date_keyword = "오늘"
-    elif date.weekday() == (
-            datetime.datetime.now(tz=tz).weekday() + 1) % 7:
-        date_keyword = "내일"
+        date_keyword = u"오늘".encode('utf-8')
+    elif date.weekday() == (datetime.datetime.now(tz=tz).weekday() + 1) % 7:
+        date_keyword = u"내일".encode('utf-8')
     else:
         date_keyword = weekday
 
@@ -126,6 +127,7 @@ def handle(text, mic, profile):
     for entry in forecast:
         try:
             date_desc = entry['title'].split()[0].strip().lower()
+            print(entry['title'], date_desc)
             if date_desc == 'forecast':
                 # For global forecasts
                 date_desc = entry['title'].split()[2].strip().lower()
@@ -133,11 +135,16 @@ def handle(text, mic, profile):
             elif date_desc == 'current':
                 # For first item of global forecasts
                 continue
-
+            print(weekday, date_desc, weekday == date_desc)
             if weekday == date_desc:
-                output = date_keyword + \
-                    ", " + weather_desc + "."
+                print('YES')
+                print("OUT:", output)
+                print(date_keyword, weather_desc)
+                output = date_keyword + ", " + weather_desc.encode('utf-8') + "."
+                print('OK, ', output)
                 break
+            else:
+                print("NO")
         except:
             continue
 
@@ -149,5 +156,6 @@ def handle(text, mic, profile):
 
 
 def isValid(text):
-    
-    return bool(re.search(r'\b날씨\b', text, re.IGNORECASE))
+    print("WEATHER")
+    print(bool(re.search(ur'\b날씨[을를]?\b', text, re.IGNORECASE | re.UNICODE)))
+    return bool(re.search(ur'\b날씨[을를]?\b', text, re.IGNORECASE | re.UNICODE))
