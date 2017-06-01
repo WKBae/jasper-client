@@ -35,7 +35,7 @@ def read_temp():
 	
 
 def handle(text, mic, profile):
-    mic.say("주변 온도는 %s입니다.", % temp_c)
+    mic.say("주변 온도는 %s입니다." % temp_c)
 
 def isValid(text):
     return bool(re.search(ur'\b주변 온도[을를]?\b', text, re.IGNORECASE | re.UNICODE))
