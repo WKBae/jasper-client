@@ -36,7 +36,8 @@ def get_time(line):
 	hourMatch = re.search(ur'([0-9]+)시', line, re.IGNORECASE | 	re.UNICODE)
 	minuteMatch = re.search(ur'([0-9]+)분', line, re.IGNORECASE | re.UNICODE)
 	if hourMatch == None:
-	    # 몇시인지 말하라고 추궁
+	    # TODO 몇시인지 말하라고 추궁
+		print("[ALARM] no hour")
 	else:
 	    hour = int(hourMatch.group(1))
 	    if minuteMatch != None:
