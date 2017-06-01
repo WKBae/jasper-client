@@ -67,4 +67,4 @@ def handle(text, mic, profile):
 
 
 def isValid(text):
-    return bool(re.search(ur'\b알람을? 추가해?\b', text, re.IGNORECASE | re.UNICODE))
+    return bool(re.search(ur'\b알람을 추가\b', text, re.IGNORECASE | re.UNICODE))
