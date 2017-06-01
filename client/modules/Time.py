@@ -1,9 +1,11 @@
+#-*- coding: utf-8 -*-
+
 import datetime
 import re
 from client.app_utils import getTimezone
 from semantic.dates import DateService
 
-WORDS = ["몇시"]
+WORDS = [u"몇시"]
 
 
 def handle(text, mic, profile):
@@ -17,4 +19,4 @@ def handle(text, mic, profile):
 
 def isValid(text):
 
-    return bool(re.search(r'\btime\b', text, re.IGNORECASE))
+    return bool(re.search(ur'\b시간[을를]?\b', text, re.IGNORECASE | re.UNICODE))
