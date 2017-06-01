@@ -425,7 +425,7 @@ class GoogleTTS(AbstractMp3TTSEngine):
 
     SLUG = "google-tts"
 
-    def __init__(self, language='en'):
+    def __init__(self, language='ko'):
         super(self.__class__, self).__init__()
         self.language = language
 
