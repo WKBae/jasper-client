@@ -3,7 +3,7 @@
 import time
 import re
 
-WORDS = ["타이머"]
+WORDS = [u"타이머"]
 
 def get_time(line):
     hourMatch = re.search(ur'([0-9]+)시', line, re.IGNORECASE | re.UNICODE)

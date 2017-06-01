@@ -1,8 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import schedule
 import time
 import re
 
-WORDS = ["알람", "추가"]
+WORDS = [u"알람", u"추가"]
 
 
 def get_weekdays(line):

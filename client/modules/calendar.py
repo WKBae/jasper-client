@@ -14,7 +14,7 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.tools import *
 
 FLAGS = gflags.FLAGS
-WORDS = [ "일정" ]
+WORDS = [ u"일정" ]
 
 clinet_id = '816217761407-ffqnt48rm4latmloq9tlb4gq7ftqfjk5.apps.googleusercontent.com'
 client_secret = 'JOJ_qz6w3IH9okpG10DTWA0u'
