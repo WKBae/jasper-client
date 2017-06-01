@@ -13,7 +13,7 @@ def get_weekdays(line):
     if bool(re.search(ur'\b화요일\b', line, re.IGNORECASE | re.UNICODE)):
         return schedule.every().tuesday
         
-     if bool(re.search(ur'\b수요일\b', line, re.IGNORECASE | re.UNICODE)):
+    if bool(re.search(ur'\b수요일\b', line, re.IGNORECASE | re.UNICODE)):
         return schedule.every().wednesday
         
     if bool(re.search(ur'\b목요일\b', line, re.IGNORECASE | re.UNICODE)):
@@ -22,7 +22,7 @@ def get_weekdays(line):
     if bool(re.search(ur'\b금요일\b', line, re.IGNORECASE | re.UNICODE)):
         return schedule.every().friday
         
-     if bool(re.search(ur'\b토요일\b', line, re.IGNORECASE | re.UNICODE)):
+    if bool(re.search(ur'\b토요일\b', line, re.IGNORECASE | re.UNICODE)):
         return schedule.every().saturday
         
     if bool(re.search(ur'\b일요일\b', line, re.IGNORECASE | re.UNICODE)):
@@ -67,4 +67,4 @@ def handle(text, mic, profile):
 
 
 def isValid(text):
-    return bool(re.search(ur'\b알람을 추가\b', text, re.IGNORECASE | re.UNICODE))
+    return bool(re.search(ur'\b알람을? 추가해?\b', text, re.IGNORECASE | re.UNICODE))
