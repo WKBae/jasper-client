@@ -6,7 +6,7 @@ import time
 import re
 
 
-WORDS = [u"주변", u"온도"]
+WORDS = [u"온도"]
 
 os.system('modprobe w1-gpio')
 os.system('modprobe w1-therm')
@@ -35,7 +35,7 @@ def read_temp():
 	
 
 def handle(text, mic, profile):
-    mic.say("주변 온도는 %s입니다." % read_temp()[0])
+    mic.say("주변 온도는 %.1f도입니다." % read_temp()[0])
 
 def isValid(text):
-    return bool(re.search(ur'\b주변 온도[을를]?\b', text, re.IGNORECASE | re.UNICODE))
+    return bool(re.search(ur'\b(주변|집 ?안|방 ?안) 온도[을를]?\b', text, re.IGNORECASE | re.UNICODE))
