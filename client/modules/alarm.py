@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import schedule
 import time
 import re
@@ -8,33 +7,34 @@ WORDS = [u"알람", u"추가"]
 
 
 def get_weekdays(line):
-	if bool(re.search(ur'\b월요일\b', text, re.IGNORECASE)):
-	 	schedule.every().monday
+	if bool(re.search(ur'\b월요일\b', text, re.IGNORECASE | 	re.UNICODE)):
+	 	return schedule.every().monday
 	 	
-	if bool(re.search(ur'\b화요일\b', text, re.IGNORECASE)):
-	 	schedule.every().tuesday
+	if bool(re.search(ur'\b화요일\b', text, re.IGNORECASE | 	re.UNICODE)):
+	 	return schedule.every().tuesday
 	 	
- 	if bool(re.search(ur'\b수요일\b', text, re.IGNORECASE)):
-		schedule.every().wednesday
+ 	if bool(re.search(ur'\b수요일\b', text, re.IGNORECASE | 	re.UNICODE)):
+		return schedule.every().wednesday
 	 	
-	if bool(re.search(ur'\b목요일\b', text, re.IGNORECASE)):
-	 	schedule.every().thursday
-	 	schedule.cancel_job()
-	if bool(re.search(ur'\b금요일\b', text, re.IGNORECASE)):
-	 	schedule.every().friday
+	if bool(re.search(ur'\b목요일\b', text, re.IGNORECASE | 	re.UNICODE)):
+	 	return schedule.every().thursday
 	 	
- 	if bool(re.search(ur'\b토요일\b', text, re.IGNORECASE)):
-		schedule.every().saturday
+	if bool(re.search(ur'\b금요일\b', text, re.IGNORECASE | 	re.UNICODE)):
+	 	return schedule.every().friday
 	 	
-	if bool(re.search(ur'\b일요일\b', text, re.IGNORECASE)):
-	 	schedule.every().sunday 	
-	 schedule.cancel_job()	
+ 	if bool(re.search(ur'\b토요일\b', text, re.IGNORECASE | 	re.UNICODE)):
+		return schedule.every().saturday
+	 	
+	if bool(re.search(ur'\b일요일\b', text, re.IGNORECASE | 	re.UNICODE)):
+	 	return schedule.every().sunday
+
+	return schedule.every().days
 
 
 def get_time(line): 
 	#24시 기준인지? 아니면 오전 오후있는지? 없으면 오전으로 간주
-	hourMatch = re.search(ur'([0-9]+)시', line, re.IGNORECASE)
-	minuteMatch = re.search(ur'([0-9]+)분', line, re.IGNORECASE)
+	hourMatch = re.search(ur'([0-9]+)시', line, re.IGNORECASE | 	re.UNICODE)
+	minuteMatch = re.search(ur'([0-9]+)분', line, re.IGNORECASE | re.UNICODE)
 	if hourMatch == None:
 	    # 몇시인지 말하라고 추궁
 	else:
@@ -45,22 +45,26 @@ def get_time(line):
 	        minute = 0
 
 	    if hour > 12:
-	        schedule.every().at("%02d:%02d" % (hour,minute))
+	        return "%02d:%02d" % (hour,minute)
 	    else:
-	    	if bool(re.search(ur'\b오전\b', text, re.IGNORECASE)):
-	    		schedule.every().at("%02d:%02d" % (hour,minute))
+	    	if bool(re.search(ur'\b오전\b', text, re.IGNORECASE | re.UNICODE)):
+	    		return "%02d:%02d" % (hour,minute)
 	    	else:
-	    		schedule.every().at("%02d:%02d" % (hour+12,minute))
+	    		return "%02d:%02d" % (hour+12,minute)
 
 
 def handle(text, mic, profile):
 	mic.say("언제 알람을 추가하시겠습니까?")
 	line = mic.activeListen()
-	get_weekdays(line)
-	get_time(line)
+	weekdays = get_weekdays(line)
+
+	def job():
+		mic.speaker.play(jasperpath.data('audio', 'beep_lo.wav'))
+
+	weekdays.at(get_time(line)).do(job)
 	mic.say("알람이 추가되었습니다.")
 
 
 def isValid(text):
 
-	return bool(re.search(ur'\b알람을 추가\b', text, re.IGNORECASE))	
+	return bool(re.search(ur'\b알람을 추가\b', text, re.IGNORECASE | re.UNICODE))	

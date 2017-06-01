@@ -19,4 +19,4 @@ def handle(text, mic, profile):
 
 def isValid(text):
 
-    return bool(re.search(ur'\b시간[을를]?\b', text, re.IGNORECASE | re.UNICODE))
+    return bool(re.search(ur'\b몇 시야\b', text, re.IGNORECASE | re.UNICODE))
