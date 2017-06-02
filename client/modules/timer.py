@@ -10,7 +10,7 @@ from semantic.dates import DateService
 
 WORDS = [u"타이머"]
 
-def get_time(line):
+def get_time(line, profile):
     tz = getTimezone(profile)
     now = datetime.datetime.now(tz=tz)
 
@@ -42,7 +42,7 @@ def get_time(line):
 def handle(text, mic, profile):
     mic.say("타이머를 추가하시겠습니까?")
     line = mic.activeListen()
-    time = get_time(line)
+    time = get_time(line, profile)
    
     def job():
         mic.speaker.play(jasperpath.data('audio', 'beep_lo.wav'))
