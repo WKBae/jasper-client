@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import schedule
-import time
+import jasperpath
 import re
 
 WORDS = [u"알람", u"추가"]
