@@ -33,10 +33,7 @@ def get_time(line, profile):
             minute = 0
             timer = now + datetime.timedelta(hours=hour)
         
-    service = DateService()
-    response = service.convertTime(timer)
-
-    return response
+    return timer
 
 
 def handle(text, mic, profile):
@@ -47,8 +44,11 @@ def handle(text, mic, profile):
     def job():
         mic.speaker.play(jasperpath.data('audio', 'beep_lo.wav'))
 
-    schedule.every().days.at(time).do(job)
-    mic.say("%s 타이머가 추가되었습니다." % time)
+    schedule.every().days.at("%02d:%02d" % (time.hour, time.minute)).do(job)
+    service = DateService()
+    response = service.convertTime(time)
+
+    mic.say("%s 타이머가 추가되었습니다." % response)
 
 def isValid(text):
     return bool(re.search(ur'\b타이머를? 추가해?\b', text, re.IGNORECASE | re.UNICODE))
