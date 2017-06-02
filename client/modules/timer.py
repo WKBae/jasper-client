@@ -48,7 +48,7 @@ def handle(text, mic, profile):
         mic.speaker.play(jasperpath.data('audio', 'beep_lo.wav'))
 
     schedule.every().days.at(time).do(job)
-    mic.say("타이머가 추가되었습니다.")
+    mic.say("%s 타이머가 추가되었습니다." % time)
 
 def isValid(text):
     return bool(re.search(ur'(\b타이머를? 추가해?\b', text, re.IGNORECASE | re.UNICODE))
