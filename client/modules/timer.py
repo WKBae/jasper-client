@@ -20,7 +20,7 @@ def get_time(line, profile):
     if hourMatch == None:
         if minuteMatch != None:
             minute = int(minuteMatch.group(1))
-            timer = datetime.timedelta(minutes=minute)
+            timer = now + datetime.timedelta(minutes=minute)
         else:
             minute = 0
             timer = now
@@ -28,10 +28,10 @@ def get_time(line, profile):
         hour = int(hourMatch.group(1))
         if minuteMatch != None:
             minute = int(minuteMatch.group(1))
-            timer = datetime.timedelta(hours=hour, minutes=minute)
+            timer = now + datetime.timedelta(hours=hour, minutes=minute)
         else:
             minute = 0
-            timer = datetime.timedelta(hours=hour)
+            timer = now + datetime.timedelta(hours=hour)
         
     service = DateService()
     response = service.convertTime(timer)
