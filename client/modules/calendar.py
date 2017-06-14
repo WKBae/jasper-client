@@ -63,11 +63,11 @@ def addEvent(profile, mic):
 		
 			dictKeys = [ key for key, val in monthDict.items() if val==eventDateMonth ]
 			eventDateMonth = dictKeys[0]
-			mic.say(createdEvent['summary'] + str(eventDateMonth) + " " + str(eventDateDay) + appendingTime + str(eventTimeHour) + ":" + str(eventTimeMinute) + " 일정 추가")
+			mic.say(createdEvent['summary'] + str(eventDateMonth) + " " + str(eventDateDay) + appendingTime + str(eventTimeHour) + "시" + str(eventTimeMinute) + "분" +" 일정 추가")
 			mic.say("이 일정을 추가하시겠습니까?")
 			userResponse = mic.activeListen()
 			
-			if bool(re.search('예', userResponse, re.IGNORECASE)):
+			if bool(re.search('예', userResponse, re.IGNORECASE | re.UNICODE)):
 				mic.say("추가 되었습니다")
 				return
 	
@@ -79,7 +79,7 @@ def addEvent(profile, mic):
 			mic.say("다시 시도 하시겠니까?")
 			responseRedo = mic.activeListen()
 
-			if bool(re.search('아니오', responseRedo, re.IGNORECASE)):
+			if bool(re.search(ur'아니', responseRedo, re.IGNORECASE | re.UNICODE)):
 				return
 
 
@@ -121,7 +121,7 @@ def getEventsToday(profile, mic):
 
 				startMinute = str(startMinute)
 				startHour = str(startHour)
-				mic.say(eventTitle + appendingTime + startHour + ":" + startMinute + " ")
+				mic.say(eventTitle + appendingTime + startHour + "시" + startMinute +"분")
 			except KeyError, e:
 				mic.say("바르게 일정이 추가 되었는지 확인하십시오")
 			
@@ -147,7 +147,6 @@ def getEventsTomorrow(profile, mic):
 
 	while True:
 
-		
 		events = service.events().list(calendarId='primary', pageToken=page_token, timeMin=tomorrowStartTime, timeMax=tomorrowEndTime).execute()
 		if(len(events['items']) == 0):
 			mic.say("내일 일정은 없습니다.")
@@ -171,7 +170,7 @@ def getEventsTomorrow(profile, mic):
 
 				startMinute = str(startMinute)
 				startHour = str(startHour)
-				mic.say(eventTitle + appendingTime +startHour + ":" + startMinute + " ")
+				mic.say(eventTitle + appendingTime +startHour + "시" + startMinute + "분")
 
 			except KeyError, e:
 				mic.say("바르게 일정이 추가 되었는지 확인하십시오")
@@ -197,15 +196,15 @@ service = build('calendar', 'v3', http=http)
 
 def handle(text, mic, profile):
 		
-	if bool(re.search('추가', text, re.IGNORECASE)):
+	if bool(re.search(ur'추가', text, re.IGNORECASE | re.UNICODE)):
 		addEvent(profile,mic)
 
-	if bool(re.search('오늘', text, re.IGNORECASE)):
+	if bool(re.search(ur'오늘', text, re.IGNORECASE | re.UNICODE)):
 		getEventsToday(profile,mic)
 
-	if bool(re.search('내일', text, re.IGNORECASE)):
+	if bool(re.search(ur'내일', text, re.IGNORECASE | re.UNICODE)):
 		getEventsTomorrow(profile,mic)
 
 
 def isValid(text):
-	return bool(re.search(r'\b일정\b', text, re.IGNORECASE))
+	return bool(re.search(ur'\b일정을?\b', text, re.IGNORECASE | re.UNICODE))
