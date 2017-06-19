@@ -1,5 +1,6 @@
 #-*- coding: utf-8 -*-
 
+import RPi.GPIO as GPIO
 import re
 import datetime
 import struct
@@ -9,9 +10,6 @@ import requests
 import bs4
 from client.app_utils import getTimezone
 from semantic.dates import DateService
-
-WORDS = [u"날씨", u"오늘", u"내일"]
-
 
 def replaceAcronyms(text):
     """
@@ -95,7 +93,7 @@ def get_forecast_by_wmo_id(wmo_id):
                             % wmo_id)['entries']
 
 
-def handle(text, mic, profile):
+def handle(text, profile):
 
     forecast = None
     if 'wmo_id' in profile:
@@ -104,25 +102,13 @@ def handle(text, mic, profile):
         forecast = get_forecast_by_name(str(profile['location']))
 
     if not forecast:
-        mic.say("날씨 정보를 얻어오는 것을 실패하였습니다.")
         return
 
     tz = getTimezone(profile)
 
     service = DateService(tz=tz)
     date = service.extractDay(text)
-    if not date:
-        date = datetime.datetime.now(tz=tz)
-    weekday = service.__daysOfWeek__[date.weekday()]
-
-    if date.weekday() == datetime.datetime.now(tz=tz).weekday():
-        date_keyword = u"오늘".encode('utf-8')
-    elif date.weekday() == (datetime.datetime.now(tz=tz).weekday() + 1) % 7:
-        date_keyword = u"내일".encode('utf-8')
-    else:
-        date_keyword = weekday
-
-    output = None
+    date = datetime.datetime.now(tz=tz)
 
     for entry in forecast:
         try:
@@ -130,34 +116,19 @@ def handle(text, mic, profile):
             print(entry['title'], date_desc)
             if date_desc == 'forecast':
                 # For global forecasts
-                date_desc = entry['title'].split()[2].strip().lower()
                 weather_desc = entry['description'].split(".")[0].strip().lower()
-                temperture_des = entry['description'].split(".")[1].strip().lower()
+                if 'cloud' in weather_desc:
+                    show_weather(cloud=(255, 255, 255))
+                elif 'rain' in weather_desc:
+                    show_weather(rain=(0, 0, 255))
+                elif 'snow' in weather_desc:
+                    show_weather(snow=(255, 255, 255))
+                else:
+                    show_weather(sun=(255, 0, 0))
+
 
             elif date_desc == 'current':
                 # For first item of global forecasts
                 continue
-            print(weekday, date_desc, weekday == date_desc)
-            if weekday == date_desc:
-                print('YES')
-                print("OUT:", output)
-                print(date_keyword, weather_desc, temperture_des)
-                output = date_keyword + ", " + weather_desc.encode('utf-8') + "," + temperture_des.encode(utf-8) + "."
-                print('OK, ', output)
-                break
-            else:
-                print("NO")
         except:
             continue
-
-    if output:
-        output = replaceAcronyms(output)
-        mic.say(output)
-    else:
-        mic.say("죄송합니다. 찾을 수 없습니다.")
-
-
-def isValid(text):
-    print("WEATHER")
-    print(bool(re.search(ur'\b날씨[을를]?\b', text, re.IGNORECASE | re.UNICODE)))
-    return bool(re.search(ur'\b날씨[을를]?\b', text, re.IGNORECASE | re.UNICODE))
