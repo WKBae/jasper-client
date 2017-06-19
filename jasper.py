@@ -15,6 +15,8 @@ from client import jasperpath
 from client import diagnose
 from client.conversation import Conversation
 
+import display
+
 # Add jasperpath.LIB_PATH to sys.path
 sys.path.append(jasperpath.LIB_PATH)
 
@@ -109,7 +111,11 @@ class Jasper(object):
                        stt_passive_engine_class.get_passive_instance(),
                        stt_engine_class.get_active_instance())
 
+        self.ticker = Ticker(self.config)
+
     def run(self):
+        self.ticker.start()
+
         if 'first_name' in self.config:
             salutation = ("How can I be of service, %s?"
                           % self.config["first_name"])
@@ -119,6 +125,19 @@ class Jasper(object):
 
         conversation = Conversation(u"누리", self.mic, self.config)
         conversation.handleForever()
+
+
+class Ticker(threading.Thread):
+    def __init__(self, config):
+        super(Ticker, self).__init__(name="Ticker")
+        self.daemon = True
+        display.setup(config)
+
+    def run(self):
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+
 
 if __name__ == "__main__":
 
