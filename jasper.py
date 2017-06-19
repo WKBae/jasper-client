@@ -120,10 +120,10 @@ class Jasper(object):
         self.ticker.start()
 
         if 'first_name' in self.config:
-            salutation = ("How can I be of service, %s?"
-                          % self.config["first_name"])
+            salutation = "무엇을 도와드릴까요?"
+                          
         else:
-            salutation = "How can I be of service?"
+            salutation = "무엇을 도와드릴까요?"
         self.mic.say(salutation)
 
         conversation = Conversation(u"누리", self.mic, self.config)

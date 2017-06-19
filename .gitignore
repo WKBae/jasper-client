@@ -66,3 +66,4 @@ target/
 # SublimeLinter config file
 .sublimelinterrc
 client/modules/lcd.py
+client/modules/alarm.py
