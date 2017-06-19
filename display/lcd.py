@@ -3,7 +3,7 @@
 import RPi.GPIO as GPIO
 import requests
 import bs4
-import lcd_i2c as LCD
+import _lcd_i2c as LCD
 
 from display import Display
 
@@ -16,7 +16,7 @@ class LcdDisplay(Display):
 		LCD.lcd_init()
 
 		self.key = config['keys']['DUST_API'] # KaN7MvIVm%2Bz29aS4YWJlPSZZ1mWJ42n8RZq3K0UL0jFDk3m%2FCofalymRMjl4c%2B4NdweiRiAN0rRemtHt33IWAw%3D%3D
-		self.location = config['dust_location'] # 명륜동
+		self.location = "명륜동" # config['dust_location']
 
 	def period(self):
 		return 5 * 60 # update every 5 mins
@@ -31,5 +31,5 @@ class LcdDisplay(Display):
 		pm10Grade1h = soup.find('pm10grade1h').string
 		pm25Grade1h = soup.find('pm25grade1h').string
 
-		LCD.lcd_string('PM10 %s:%s' % (pm10Value, grades[int(pm10Grade1h)]), LCD.LCD_LINE_1)
-		LCD.lcd_string('PM25 %s:%s' % (pm25Value, grades[int(pm25Grade1h)]), LCD.LCD_LINE_2)
+		LCD.lcd_string('PM10 %s:%s' % (pm10Value, LcdDisplay.grades[int(pm10Grade1h)]), LCD.LCD_LINE_1)
+		LCD.lcd_string('PM25 %s:%s' % (pm25Value, LcdDisplay.grades[int(pm25Grade1h)]), LCD.LCD_LINE_2)

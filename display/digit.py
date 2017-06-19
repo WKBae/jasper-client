@@ -22,8 +22,8 @@ class DigitDisplay(Display):
 		else:
 			self.spi_device = 0
 
-		spi = spidev.SpiDev()
-		spi.open(0, self.spi_device)
+		self.spi = spidev.SpiDev()
+		self.spi.open(0, self.spi_device)
 		#spi.lsbfirst = True
 
 		GPIO.setmode(GPIO.BCM)
@@ -39,13 +39,13 @@ class DigitDisplay(Display):
 	    m1 = minutes / 10 % 10
 	    m2 = minutes % 10
 
-	    bytes = [digit[m2], digit[m1], digit[h2], digit[h1]]
+	    bytes = [DigitDisplay.digit[m2], DigitDisplay.digit[m1], DigitDisplay.digit[h2], DigitDisplay.digit[h1]]
 	    if dot_top:
 	        bytes[1] |= 0b10000000
 	    if dot_bottom:
 	        bytes[2] |= 0b10000000
 
-	    spi.writebytes(bytes)
+	    self.spi.writebytes(bytes)
 	    GPIO.output(self.latch, True)
 	    time.sleep(0.00005)
 	    GPIO.output(self.latch, False)
@@ -56,5 +56,5 @@ class DigitDisplay(Display):
 	def update(self):
 	    now = time.localtime()
 	    self.dot_shown = not self.dot_shown
-	    write_time(now.tm_hour, now.tm_min, dot_shown, dot_shown)
+	    self.write_time(now.tm_hour, now.tm_min, self.dot_shown, self.dot_shown)
 

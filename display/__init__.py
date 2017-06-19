@@ -1,6 +1,8 @@
 # -*- coding: utf8 -*-
 
-from display import *
+from _display import *
+
+import _lcd_i2c
 
 from lcd import LcdDisplay
 from digit import DigitDisplay

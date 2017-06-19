@@ -132,7 +132,7 @@ def handle(text, mic, profile):
                 # For global forecasts
                 date_desc = entry['title'].split()[2].strip().lower()
                 weather_desc = entry['description'].split(".")[0].strip().lower()
-                temperture_des = entry['description'].split(".")[1].strip().lower()
+                temperature_des = entry['description'].split()[2].strip().lower()
 
             elif date_desc == 'current':
                 # For first item of global forecasts
@@ -141,13 +141,20 @@ def handle(text, mic, profile):
             if weekday == date_desc:
                 print('YES')
                 print("OUT:", output)
-                print(date_keyword, weather_desc, temperture_des)
-                output = date_keyword + ", " + weather_desc.encode('utf-8') + "," + temperture_des.encode(utf-8) + "."
+                print(date_keyword, weather_desc, temperature_des)
+                output = date_keyword + ", " + weather_desc.encode('utf-8')
+                tem = re.search(r'([0-9]+)', temperature_des.encode('utf-8'))
+                if tem:
+                    output += ", Highest temperature " + tem.group(1)
+                output += "."
                 print('OK, ', output)
                 break
             else:
                 print("NO")
         except:
+            import sys
+            e = sys.exc_info()[0]
+            print(e)
             continue
 
     if output:

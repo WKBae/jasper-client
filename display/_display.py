@@ -5,10 +5,12 @@ import pkgutil
 
 import schedule
 
+from client import jasperpath
+
 displays = []
 def setup(config):
 	logger = logging.getLogger(__name__)
-	for finder, name, ispkg in pkgutil.walk_packages(['.']):
+	for finder, name, ispkg in pkgutil.walk_packages([jasperpath.DISPLAY_PATH]):
 		if name == __name__: continue
 		try:
 			loader = finder.find_module(name)

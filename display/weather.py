@@ -28,7 +28,6 @@ class WeatherDisplay(Display):
 			self.snow_pin = (13, 19, 16)
 
 		GPIO.setmode(GPIO.BCM)
-		elems = ['sun', 'cloud', 'rain', 'snow']
 
 		def setup_pin(pin):
 			GPIO.setup(pin, GPIO.OUT)
@@ -36,9 +35,15 @@ class WeatherDisplay(Display):
 			p.start(0)
 			return p
 
+		elems = ['sun', 'cloud', 'rain', 'snow']
 		for elem in elems:
 			setattr(self, elem, tuple(map(setup_pin, getattr(self, elem + "_pin"))))
 		
+		self._lastSun = None
+		self._lastCloud = None
+		self._lastRain = None
+		self._lastSnow = None
+
 	def period(self):
 		return 1
 
@@ -48,19 +53,18 @@ class WeatherDisplay(Display):
 			targets[i].ChangeDutyCycle(cycles[i] * 100 / 255)
 
 	def update(self):
-		if Sun != self._lastSun:
-			_update_rate(self.sun, Sun)
-			self._lastSun = Sun
+		if WeatherDisplay.Sun != self._lastSun:
+			WeatherDisplay._update_rate(self.sun, WeatherDisplay.Sun)
+			self._lastSun = WeatherDisplay.Sun
 		
-		if Cloud != self._lastCloud:
-			_update_rate(self.cloud, Cloud)
-			self._lastCloud = Cloud
+		if WeatherDisplay.Cloud != self._lastCloud:
+			WeatherDisplay._update_rate(self.cloud, WeatherDisplay.Cloud)
+			self._lastCloud = WeatherDisplay.Cloud
 		
-		if Rain != self._lastRain:
-			_update_rate(self.rain, Rain)
-			self._lastRain = Rain
+		if WeatherDisplay.Rain != self._lastRain:
+			WeatherDisplay._update_rate(self.rain, WeatherDisplay.Rain)
+			self._lastRain = WeatherDisplay.Rain
 		
-		if Snow != self._lastSnow:
-			_update_rate(self.snow, Snow)
-			self._lastSnow = Snow
-	
+		if WeatherDisplay.Snow != self._lastSnow:
+			WeatherDisplay._update_rate(self.snow, WeatherDisplay.Snow)
+			self._lastSnow = WeatherDisplay.Snow
