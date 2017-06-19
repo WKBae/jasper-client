@@ -46,4 +46,4 @@ class Conversation(object):
             if input:
                 self.brain.query(input)
             else:
-                self.mic.say("Pardon?")
+                self.mic.say("다시 한번 말씀해주세요.")
