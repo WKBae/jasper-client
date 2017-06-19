@@ -1,11 +1,14 @@
 # -*- coding: utf8 -*-
 
+import logging
+import pkgutil
+
 import schedule
 
 displays = []
 def setup(config):
 	logger = logging.getLogger(__name__)
-	for finder, name, ispkg in pkgutils.walk_packages(['.']):
+	for finder, name, ispkg in pkgutil.walk_packages(['.']):
 		if name == __name__: continue
 		try:
 			loader = finder.find_module(name)
