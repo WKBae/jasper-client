@@ -144,15 +144,15 @@ def handle(text, mic, profile):
                
                 
                 if 'cloudy' in weather_desc:
-                    weather_desc = weather_desc.replace("cloudy", "흐림")
+                    weather_desc = weather_desc.replace('cloudy', ur'흐림')
                 elif 'sunny' in weather_desc:
-                    weather_desc = weather_desc.replace("sunny", "맑음")
+                    weather_desc = weather_desc.replace('sunny', ur'맑음')
                 elif 'rain' in weather_desc:
-                    weather_desc = weather_desc.replace("rain", "비")
+                    weather_desc = weather_desc.replace('rain', ur'비')
                 elif 'snow' in weather_desc:
-                    weather_desc = weather_desc.replace("snow", "눈")
+                    weather_desc = weather_desc.replace('snow', ur'눈')
                 else:
-                    weather_desc = weather_desc.replace("sunny", "맑음")
+                    weather_desc = weather_desc.replace('sunny', ur'맑음')
                     
                 if 'partly' in weather_desc:
                     weather_desc = weather_desc.replace("partly", "대체로")
