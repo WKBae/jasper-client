@@ -141,7 +141,7 @@ def handle(text, mic, profile):
             if weekday == date_desc:
                 print('YES')
                 print("OUT:", output)
-                print(date_keyword, weather_desc, temperature_des)
+               
                 
                 if 'cloudy' in weather_desc:
                     weather_desc = weather_desc.replace("cloudy", "흐림")
@@ -157,6 +157,7 @@ def handle(text, mic, profile):
                 if 'partly' in weather_desc:
                     weather_desc = weather_desc.replace("partly", "대체로")
 
+                print(date_keyword, weather_desc, temperature_des)
                 output = date_keyword + ", " + weather_desc
                 tem = re.search(r'([0-9]+)', temperature_des.encode('utf-8'))
                 if tem:
@@ -167,9 +168,8 @@ def handle(text, mic, profile):
             else:
                 print("NO")
         except:
-            import sys
-            e = sys.exc_info()[0]
-            print(e)
+            import traceback
+            traceback.print_exc()
             continue
 
     if output:
