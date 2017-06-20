@@ -67,3 +67,4 @@ target/
 .sublimelinterrc
 client/modules/lcd.py
 client/modules/alarm.py
+client/modules/music.py

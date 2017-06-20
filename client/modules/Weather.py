@@ -142,10 +142,24 @@ def handle(text, mic, profile):
                 print('YES')
                 print("OUT:", output)
                 print(date_keyword, weather_desc, temperature_des)
+                if 'cloudy' in weather_desc:
+                    weather_desc = weather_desc.replace("cloudy", "흐림")
+                elif 'sunny' in weather_desc:
+                    weather_desc = weather_desc.replace("sunny", "맑음")
+                elif 'rain' in weather_desc:
+                    weather_desc = weather_desc.replace("rain", "비")
+                elif 'snow' in weather_desc:
+                    weather_desc = weather_desc.replace("snow", "눈")
+                else:
+                    weather_desc = weather_desc.replace("sunny", "맑음")
+                    
+                if 'partly' in weather_desc:
+                    weather_desc = weather_desc.replace("partly", "대체로")
+
                 output = date_keyword + ", " + weather_desc.encode('utf-8')
                 tem = re.search(r'([0-9]+)', temperature_des.encode('utf-8'))
                 if tem:
-                    output += ", Highest temperature " + tem.group(1)
+                    output += ", 최고기온은 " + tem.group(1)
                 output += "."
                 print('OK, ', output)
                 break
