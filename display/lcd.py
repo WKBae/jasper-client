@@ -31,5 +31,11 @@ class LcdDisplay(Display):
 		pm10Grade1h = soup.find('pm10grade1h').string
 		pm25Grade1h = soup.find('pm25grade1h').string
 
-		LCD.lcd_string('PM10 %s:%s' % (pm10Value, LcdDisplay.grades[int(pm10Grade1h)]), LCD.LCD_LINE_1)
-		LCD.lcd_string('PM25 %s:%s' % (pm25Value, LcdDisplay.grades[int(pm25Grade1h)]), LCD.LCD_LINE_2)
+		if not pm10Value or not pm10Grade1h:
+			LCD.lcd_string('PM10 - Error', LCD.LCD_LINE_1)
+		else:
+			LCD.lcd_string('PM10 %s:%s' % (pm10Value, LcdDisplay.grades[int(pm10Grade1h)]), LCD.LCD_LINE_1)
+		if not pm25Value or not pm25Grade1h:
+			LCD.lcd_string('PM25 - Error', LCD.LCD_LINE_2)
+		else:
+			LCD.lcd_string('PM25 %s:%s' % (pm25Value, LcdDisplay.grades[int(pm25Grade1h)]), LCD.LCD_LINE_2)
