@@ -142,6 +142,7 @@ def handle(text, mic, profile):
                 print('YES')
                 print("OUT:", output)
                 print(date_keyword, weather_desc, temperature_des)
+                
                 if 'cloudy' in weather_desc:
                     weather_desc = weather_desc.replace("cloudy", "흐림")
                 elif 'sunny' in weather_desc:
@@ -156,7 +157,7 @@ def handle(text, mic, profile):
                 if 'partly' in weather_desc:
                     weather_desc = weather_desc.replace("partly", "대체로")
 
-                output = date_keyword + ", " + weather_desc.encode('utf-8')
+                output = date_keyword + ", " + weather_desc
                 tem = re.search(r'([0-9]+)', temperature_des.encode('utf-8'))
                 if tem:
                     output += ", 최고기온은 " + tem.group(1)
