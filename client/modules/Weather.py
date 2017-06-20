@@ -155,7 +155,7 @@ def handle(text, mic, profile):
                     weather_desc = weather_desc.replace('sunny', ur'맑음')
                     
                 if 'partly' in weather_desc:
-                    weather_desc = weather_desc.replace("partly", "대체로")
+                    weather_desc = weather_desc.replace('partly', ur'대체로')
 
                 print(date_keyword, weather_desc, temperature_des)
                 output = date_keyword + ", " + weather_desc
