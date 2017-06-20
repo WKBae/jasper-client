@@ -156,9 +156,11 @@ def handle(text, mic, profile):
                     
                 if 'partly' in weather_desc:
                     weather_desc = weather_desc.replace('partly', ur'대체로')
+                elif 'mostly' in weather_desc:
+                    weather_desc = weather_desc.replace('mostly', ur'매우')
 
                 print(date_keyword, weather_desc, temperature_des)
-                output = date_keyword + ", " + weather_desc
+                output = date_keyword + ", " + weather_desc.encode('utf-8')
                 tem = re.search(r'([0-9]+)', temperature_des.encode('utf-8'))
                 if tem:
                     output += ", 최고기온은 " + tem.group(1)
